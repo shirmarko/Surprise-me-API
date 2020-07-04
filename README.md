@@ -20,4 +20,5 @@ Routes:
       - 2000<birth year<2010 AND name doesn't begin with A or Z --> Kanye West Quote
       - 2000<birth year<2010 AND name doesn't begin with Z --> User Name’s Sum
       - Otherwise --> Error
+      example: http://localhost:5000/api/surprise?name=Shir&birth_year=1994
 
