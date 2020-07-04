@@ -5,9 +5,13 @@ app = Flask(__name__)
 
 app.config['JSON_SORT_KEYS'] = False
 
-distribution = [{'type' : 'chuck-norris-joke' , 'count' : 0}, {'type' : 'kanye-quote' , 'count' : 0}, 
-{'type' : 'name-sum' , 'count' : 0}, {'type' : 'taco-recipe' , 'count' : 0}, {'type' : 'surprising-dog' , 'count' : 0}]
+distribution = [{'type' : 'chuck-norris-joke' , 'count' : 0}, 
+                {'type' : 'kanye-quote' , 'count' : 0}, 
+                {'type' : 'name-sum' , 'count' : 0}, 
+                {'type' : 'taco-recipe' , 'count' : 0}, 
+                {'type' : 'surprising-dog' , 'count' : 0}]
 
+#errors
 @app.errorhandler(404)
 def error404(error):
     return 'No Surprise For You!', 404
@@ -16,12 +20,14 @@ def error404(error):
 def error400(error):
     return 'name or birth year are missing!', 400
 
+
+#routes
 @app.route('/api/surprise')
 def index():
     name = request.args['name'] 
     birth_year = int(request.args['birth_year']) 
 
-    if birth_year >= 2015:
+    if birth_year >= 2015: 
         type = 'surprising-dog'
         inc(type)
         res = surprisingDog()
@@ -50,19 +56,17 @@ def index():
                 return jsonify({'type' : type , 'result' : res})
             else:
                 abort(404)
-            
-            
-
 
 @app.route('/api/stats')
 def getStats():
     return jsonify({'requests' : countRequests() , 'distribution' : distribution})
 
+#help functions
 def nameSum(name):
     sum = 0
-    name = name.lower()
+    name = name.lower() #to lower case
     for c in name:
-        num  = ord(c) - 96 
+        num  = ord(c) - 96 # character to order number
         sum += num
     return sum
 
@@ -90,12 +94,14 @@ def surprisingDog():
     image = json_obj['message']
     return image
 
+#returns the number of all requests
 def countRequests():
     sum = 0
     for d in distribution:
         sum += d['count']
     return sum
 
+#increment the number of times type requested
 def inc(type):
    for d in distribution:
        if d['type'] == type :
